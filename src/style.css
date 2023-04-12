@@ -19,7 +19,7 @@
 *::-webkit-scrollbar-thumb {
   background-color: rgb(42, 41, 41);
   border-radius: 14px;
-  border: 1px solid rgba(191, 27, 27, 0.707);
+  border: 2px solid rgba(191, 27, 27, 0.707);
 }
 @tailwind components;
 @tailwind utilities;
