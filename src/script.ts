@@ -1,6 +1,7 @@
 import { log } from "console";
 import { env } from "process";
 
+const searchCard = document.querySelector(".search-card") as HTMLDivElement;
 const baseUrl: string = `https://api.themoviedb.org/3/`;
 
 interface ListPopular {
@@ -55,6 +56,9 @@ function startSearch() {
     ".search-card"
   );
   input.value = "";
+  while (searchCard.hasChildNodes()) {
+    searchCard.removeChild(searchCard.firstChild);
+  }
 }
 searchButton.addEventListener("click", () => {
   startSearch();

@@ -559,6 +559,7 @@ function hmrAccept(bundle, id) {
 },{}],"gg0zR":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+const searchCard = document.querySelector(".search-card");
 const baseUrl = `https://api.themoviedb.org/3/`;
 async function logList(urlPath, urlRestPath, elementTarget) {
     const response = await fetch(`${baseUrl}${urlPath}${"251eba6339398c651fc281766138baf5"}${urlRestPath}`);
@@ -582,6 +583,7 @@ function startSearch() {
     popup.classList.add("flex");
     logList("search/movie?api_key=", `&language=en-US&query=${input.value}&page=1&include_adult=false`, ".search-card");
     input.value = "";
+    while(searchCard.hasChildNodes())searchCard.removeChild(searchCard.firstChild);
 }
 searchButton.addEventListener("click", ()=>{
     startSearch();
