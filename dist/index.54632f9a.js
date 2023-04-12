@@ -567,14 +567,11 @@ async function logList(urlPath, urlRestPath, elementTarget) {
     // console.log(list);
     fetchImage(list, elementTarget);
 }
-/* logList(
-  "discover/movie?api_key=",
-  "&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate",
-  ".card"
-); */ // logTrendingToday();
-// logList("trending/all/day?api_key=", "", ".card-2");
-// logList("movie/top_rated?api_key=", "&language=en-US&page=1", ".card-3");
-// logList("movie/upcoming?api_key=", "&language=en-US&page=1", ".card-4");
+logList("discover/movie?api_key=", "&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate", ".card");
+// logTrendingToday();
+logList("trending/all/day?api_key=", "", ".card-2");
+logList("movie/top_rated?api_key=", "&language=en-US&page=1", ".card-3");
+logList("movie/upcoming?api_key=", "&language=en-US&page=1", ".card-4");
 const searchButton = document.querySelector("#searchButton");
 function startSearch() {
     const input = document.querySelector("#searchInput");
