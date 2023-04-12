@@ -1,0 +1,1 @@
+{"mappings":"AAAA,QAAQ,GAAG,CAAC;AAEZ,QAAQ,GAAG,CAAC,QAAQ,GAAG","sources":["src/script.ts"],"sourcesContent":["console.log(\"test\");\n\nconsole.log(process.env);\n"],"names":[],"version":3,"file":"index.86da7ba5.js.map","sourceRoot":"/__parcel_source_root/"}

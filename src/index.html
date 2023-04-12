@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Netflix clone</title>
+    <script src="script.ts" type="module"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="flex w-full flex-col justify-center bg-neutral-950 box-border">
+    <div
+      class="sticky top-0 bg-neutral-800 w-screen h-auto px-4 py-6 mb-20 flex justify-evenly items-center"
+    >
+      <p class="text-5xl text-red-500 font-bold">Netflix</p>
+      <div class="flex items-center justify-between gap-4">
+        <input
+          type="text"
+          placeholder="search…"
+          class="rounded text-center h-10"
+        />
+        <button class="rounded-lg bg-neutral-950 text-white h-11 px-6 py-2">
+          Search
+        </button>
+      </div>
+    </div>
+    <div class="w-screen flex flex-col justify-center align-center mb-10 gap-4">
+      <h1 class="text-white text-2xl font-bold mx-6 my-3">Popular movies</h1>
+      <div
+        class="card bg-neutral-900 w-screen max-h-[250px] mx-auto flex overflow-x-scroll"
+      ></div>
+    </div>
+    <div class="w-full flex flex-col justify-center align-center mb-10 gap-4">
+      <h1 class="text-white text-2xl font-bold mx-6 my-3">Trending today</h1>
+      <div
+        class="card-2 bg-neutral-900 w-screen max-h-[250px] mx-auto flex overflow-x-scroll"
+      ></div>
+    </div>
+  </body>
+</html>
