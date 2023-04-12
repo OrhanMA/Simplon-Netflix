@@ -1,6 +1,5 @@
 import { log } from "console";
 import { env } from "process";
-console.log(process.env.API_KEY);
 
 const baseUrl: string = `https://api.themoviedb.org/3/`;
 
@@ -13,32 +12,59 @@ interface ListPopular {
   poster_path: string;
 }
 
-async function logPopular() {
+async function logList(urlPath, urlRestPath, elementTarget) {
   const response = await fetch(
-    `${baseUrl}discover/movie?api_key=${process.env.API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`
+    `${baseUrl}${urlPath}${process.env.API_KEY}${urlRestPath}`
   );
   const jsonData = await response.json();
   const list: ListPopular[] = jsonData.results;
-  console.log(list);
+  // console.log(list);
 
-  fetchImage(list, ".card");
+  fetchImage(list, elementTarget);
 }
 
-logPopular();
+/* logList(
+  "discover/movie?api_key=",
+  "&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate",
+  ".card"
+); */
 
-async function logTrendingToday() {
-  const response = await fetch(
-    `${baseUrl}trending/all/day?api_key=${process.env.API_KEY}`
+// logTrendingToday();
+// logList("trending/all/day?api_key=", "", ".card-2");
+
+// logList("movie/top_rated?api_key=", "&language=en-US&page=1", ".card-3");
+
+// logList("movie/upcoming?api_key=", "&language=en-US&page=1", ".card-4");
+
+const searchButton = document.querySelector(
+  "#searchButton"
+) as HTMLButtonElement;
+
+function startSearch() {
+  const input = document.querySelector("#searchInput") as HTMLInputElement;
+  const popup = document.querySelector(".popup") as HTMLDivElement;
+  const searchInfo = document.querySelector(
+    ".searchInfo"
+  ) as HTMLHeadingElement;
+  searchInfo.textContent = input.value;
+  popup.classList.remove("hidden");
+  popup.classList.add("flex");
+  logList(
+    "search/movie?api_key=",
+    `&language=en-US&query=${input.value}&page=1&include_adult=false`,
+    ".search-card"
   );
-  const jsonData = await response.json();
-  const list: ListPopular[] = jsonData.results;
-  console.log(list);
-
-  // console.log(list[0]);
-  // console.log(list[0].title);
-  fetchImage(list, ".card-2");
+  input.value = "";
 }
-logTrendingToday();
+searchButton.addEventListener("click", () => {
+  startSearch();
+});
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    startSearch();
+  } else {
+  }
+});
 
 async function fetchImage(list, target) {
   for (let i = 0; i < list.length; i++) {
@@ -46,21 +72,40 @@ async function fetchImage(list, target) {
       `https://image.tmdb.org/t/p/original${list[i].poster_path}`
     );
     /*     console.log(list[i].poster_path); */
-    console.log(`https://image.tmdb.org/t/p/w500${list[i].poster_path}`);
+    // console.log(`https://image.tmdb.org/t/p/w500${list[i].poster_path}`);
 
     const image = await response;
-    console.log(image);
-    const imageDisplay = document.createElement("img") as HTMLImageElement;
-    imageDisplay.classList.add("object-contain", "max-w-[160px]");
-    imageDisplay.setAttribute("movieID", `${list[i].id}`);
+    // console.log(image);
+    console.log(typeof `${list[i].poster_path}`, `${list[i].poster_path}`);
+
     const card = document.querySelector(target) as HTMLDivElement;
-    imageDisplay.src = image.url;
-    card.appendChild(imageDisplay);
-    imageDisplay.addEventListener("click", () => {
-      alert(`You clicked movie id: ${list[i].id}`);
-      displayModal(list[i]);
-    });
+
+    if (list[i].poster_path === null) {
+      console.log(image.url);
+      const backTitle = document.createElement("p") as HTMLParagraphElement;
+      backTitle.textContent = `${list[i].title}`;
+      backTitle.classList.add(
+        "text-center",
+        "max-w-[160px]",
+        "text-3xl",
+        "flex",
+        "items-center",
+        "justify-center",
+        "px-2"
+      );
+      card.appendChild(backTitle);
+    } else {
+      const imageDisplay = document.createElement("img") as HTMLImageElement;
+      imageDisplay.src = image.url;
+      imageDisplay.classList.add("object-contain", "max-w-[160px]");
+      if (i % 2 === 0) {
+        imageDisplay.classList.add("snap-center");
+      }
+      imageDisplay.setAttribute("movieID", `${list[i].id}`);
+      card.appendChild(imageDisplay);
+      imageDisplay.addEventListener("click", () => {
+        alert(`You clicked movie id: ${list[i].id}`);
+      });
+    }
   }
 }
-
-function displayModal(list) {}

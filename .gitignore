@@ -2,4 +2,4 @@ package.json
 package-lock.json
 node_modules
 .env
-.parcel-caches
+.parcel-cache

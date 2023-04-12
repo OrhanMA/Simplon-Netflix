@@ -9,22 +9,39 @@
     <link rel="stylesheet" href="/index.2cdaf7bc.css">
   </head>
   <body class="flex w-full flex-col justify-center bg-neutral-950 box-border">
-    <div class="sticky top-0 bg-neutral-800 w-screen h-auto px-4 py-6 mb-20 flex justify-evenly items-center">
-      <p class="text-5xl text-red-500 font-bold">Netflix</p>
+    <div class="popup shadow-md shadow-neutral-500 bg-neutral-900 text-white fixed justify-center items-center hidden flex-col w-1/2 h-5/6 mt-[2.7rem] top-1/2 left-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div class="flex flex-col h-[20%] text-center">
+        <p class="text-2xl font-semibold py-6">Search result for:</p>
+        <p class="searchInfo text-4xl font-bold py-4">Harry Potter</p>
+      </div>
+      <div class="overflow-y-scroll search-card flex flex-row flex-wrap w-full h-[80%] mt-[2rem] bg-neutral-900">
+        <!-- <p class="text-black">Test</p> -->
+      </div>
+    </div>
+    <div class="sticky top-0 bg-neutral-900 w-screen h-auto px-4 py-6 mb-20 flex justify-evenly items-center">
+      <p class="text-5xl text-red-600 font-bold">Netflix</p>
       <div class="flex items-center justify-between gap-4">
-        <input type="text" placeholder="search…" class="rounded text-center h-10">
-        <button class="rounded-lg bg-neutral-950 text-white h-11 px-6 py-2">
+        <input type="text" placeholder="movie…" class="rounded text-center h-10" id="searchInput">
+        <button id="searchButton" class="rounded-lg bg-neutral-950 text-white h-11 px-6 py-2">
           Search
         </button>
       </div>
     </div>
     <div class="w-screen flex flex-col justify-center align-center mb-10 gap-4">
       <h1 class="text-white text-2xl font-bold mx-6 my-3">Popular movies</h1>
-      <div class="card bg-neutral-900 w-screen max-h-[250px] mx-auto flex overflow-x-scroll"></div>
+      <div class="card snap-x bg-neutral-900 w-screen max-h-[250px] mx-auto flex overflow-x-scroll"></div>
     </div>
-    <div class="w-full flex flex-col justify-center align-center mb-10 gap-4">
+    <div class="w-screen flex flex-col justify-center align-center mb-10 gap-4">
       <h1 class="text-white text-2xl font-bold mx-6 my-3">Trending today</h1>
-      <div class="card-2 bg-neutral-900 w-screen max-h-[250px] mx-auto flex overflow-x-scroll"></div>
+      <div class="card-2 snap-x bg-neutral-900 w-screen max-h-[250px] mx-auto flex overflow-x-scroll"></div>
+    </div>
+    <div class="w-screen flex flex-col justify-center align-center mb-10 gap-4">
+      <h1 class="text-white text-2xl font-bold mx-6 my-3">Best ratings</h1>
+      <div class="card-3 snap-x bg-neutral-900 w-screen max-h-[250px] mx-auto flex overflow-x-scroll"></div>
+    </div>
+    <div class="w-screen flex flex-col justify-center align-center mb-10 gap-4">
+      <h1 class="text-white text-2xl font-bold mx-6 my-3">Upcoming</h1>
+      <div class="card-4 snap-x bg-neutral-900 w-screen max-h-[250px] mx-auto flex overflow-x-scroll"></div>
     </div>
   </body>
 </html>
