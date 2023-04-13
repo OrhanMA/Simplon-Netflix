@@ -1,0 +1,16 @@
+{
+  "name": "simplon-netflix",
+  "version": "1.0.0",
+  "description": "` Pour utiliser ta propre clé API dans le projet, va dans la déclaration de la fonction loglist et remplace le '${process.env.API_KEY}' par ta clé.`",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.3.1"
+  }
+}
