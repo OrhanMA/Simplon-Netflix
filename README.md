@@ -1,16 +1,12 @@
 # Simplon-Netflix
 
-<br><br/>
-
 # Setup
 
 ```
 1. git clone git@github.com:OrhanMA/Simplon-Netflix.git
 2. cd Simplon-Netflix
-2. npm init // pour initialiser npm (appuyer sur entrer pour tout)
-3. npm install // pour installer les dépendences
+2. npm install // pour installer les dépendences
 4. npx parcel src/index.html
-ou : parcel src/index.html // si votre parcel est installé au niveau global
 ```
 
 <br><br/>
@@ -41,12 +37,6 @@ API_KEY=<votre clé API>
 ```
 
 exemple: API_KEY=2345235332f3129413
-
-- Active le process.env dans le script pour lire votre clé.
-
-```
-npm i --save-dev @types/node
-```
 
 ### `Ne pas oublier de sauvegarder le fichier .env et le script.ts et puis relancer le server localhost!`
 
