@@ -12,5 +12,8 @@
     "@types/node": "^18.15.11",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.3.1"
+  },
+  "dependencies": {
+    "parcel": "^2.8.3"
   }
 }
