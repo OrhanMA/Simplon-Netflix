@@ -605,6 +605,10 @@ async function fetchImage(list, target) {
             backTitle.textContent = `${list[i].title}`;
             backTitle.classList.add("text-center", "max-w-[160px]", "sm:w-1/2", "md:w-1/3", "lg:w-1/4", "text-3xl", "flex", "items-center", "justify-center", "px-2");
             card.appendChild(backTitle);
+            backTitle.addEventListener("click", ()=>{
+                // console.log(list[i]);
+                displayDetails(list[i]);
+            });
         } else {
             const imageDisplay = document.createElement("img");
             imageDisplay.src = image.url;
@@ -613,7 +617,7 @@ async function fetchImage(list, target) {
             imageDisplay.setAttribute("movieID", `${list[i].id}`);
             card.appendChild(imageDisplay);
             imageDisplay.addEventListener("click", ()=>{
-                console.log(list[i]);
+                // console.log(list[i]);
                 displayDetails(list[i]);
             });
         }

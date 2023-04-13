@@ -104,6 +104,10 @@ async function fetchImage(list, target) {
         "px-2"
       );
       card.appendChild(backTitle);
+      backTitle.addEventListener("click", () => {
+        // console.log(list[i]);
+        displayDetails(list[i]);
+      });
     } else {
       const imageDisplay = document.createElement("img") as HTMLImageElement;
       imageDisplay.src = image.url;
@@ -120,7 +124,7 @@ async function fetchImage(list, target) {
       imageDisplay.setAttribute("movieID", `${list[i].id}`);
       card.appendChild(imageDisplay);
       imageDisplay.addEventListener("click", () => {
-        console.log(list[i]);
+        // console.log(list[i]);
         displayDetails(list[i]);
       });
     }
