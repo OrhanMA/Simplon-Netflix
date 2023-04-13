@@ -1,17 +1,54 @@
 # Simplon-Netflix
 
-` Pour utiliser ta propre clé API dans le projet, va dans la déclaration de la fonction loglist et remplace le '${process.env.API_KEY}' par ta clé.`
-
 <br><br/>
 
 # Setup
 
 ```
-git clone git@github.com:OrhanMA/Simplon-Netflix.git
-cd Simplon-Netflix
-npm install
-npx parcel src/index.html
+1. git clone git@github.com:OrhanMA/Simplon-Netflix.git
+2. cd Simplon-Netflix
+2. npm init // pour initialiser npm (appuyer sur entrer pour tout)
+3. npm install // pour installer les dépendences
+4. npx parcel src/index.html
+ou : parcel src/index.html // si votre parcel est installé au niveau global
 ```
+
+<br><br/>
+
+## `Deux solutions pour ajouter votre clé API:`
+
+### 1. `MÉTHODE 1 (rapide): Attention! Clé non cachée en cas de push`:
+
+Dans le script.ts:
+
+- supprimer les lignes 1 et 2.
+- dans la déclaration de la fonction loglist et remplace le '${process.env.API_KEY}' par ta clé.
+
+  <br><br/>
+
+### 2. `MÉTHODE 2: Safe pour le push en remote`:
+
+- Créer un fichier .env
+
+```
+touch .env
+```
+
+- Puis dans le fichier .env:
+
+```
+API_KEY=<votre clé API>
+```
+
+exemple: API_KEY=2345235332f3129413
+
+- Active le process.env dans le script pour lire votre clé.
+
+```
+npm i --save-dev @types/node
+```
+
+### `Ne pas oublier de sauvegarder le fichier .env et le script.ts et puis relancer le server localhost!`
 
 <br><br/>
 

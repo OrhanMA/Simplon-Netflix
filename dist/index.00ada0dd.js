@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"cYnab":[function(require,module,exports) {
+})({"02hUl":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "6f8beed154632f9a";
+module.bundle.HMR_BUNDLE_ID = "58d1dd1000ada0dd";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -556,13 +556,13 @@ function hmrAccept(bundle, id) {
     });
 }
 
-},{}],"gg0zR":[function(require,module,exports) {
+},{}],"cP6p1":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 const searchCard = document.querySelector(".search-card");
 const baseUrl = `https://api.themoviedb.org/3/`;
 async function logList(urlPath, urlRestPath, elementTarget) {
-    const response = await fetch(`${baseUrl}${urlPath}${"251eba6339398c651fc281766138baf5"}${urlRestPath}`);
+    const response = await fetch(`${baseUrl}${urlPath}${undefined}${urlRestPath}`);
     const jsonData = await response.json();
     const list = jsonData.results;
     // console.log(list);
@@ -660,7 +660,7 @@ closeDetailsBtn.addEventListener("click", ()=>{
     movieDetails.classList.add("hidden");
 });
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"6KWtk"}],"6KWtk":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -690,6 +690,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["cYnab","gg0zR"], "gg0zR", "parcelRequire7640")
+},{}]},["02hUl","cP6p1"], "cP6p1", "parcelRequire94c2")
 
-//# sourceMappingURL=index.54632f9a.js.map
+//# sourceMappingURL=index.00ada0dd.js.map
