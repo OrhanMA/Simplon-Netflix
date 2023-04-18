@@ -457,6 +457,10 @@ img, video {
   gap: 1.5rem;
 }
 
+.gap-2 {
+  gap: .5rem;
+}
+
 .gap-y-6 {
   row-gap: 1.5rem;
 }
@@ -528,6 +532,11 @@ img, video {
   background-color: rgb(253 224 71 / var(--tw-bg-opacity));
 }
 
+.bg-yellow-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 204 21 / var(--tw-bg-opacity));
+}
+
 .object-contain {
   object-fit: contain;
 }
@@ -568,6 +577,11 @@ img, video {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+
+.py-1 {
+  padding-top: .25rem;
+  padding-bottom: .25rem;
 }
 
 .pb-6 {

@@ -3,6 +3,20 @@ import { env } from "process";
 
 const searchCard = document.querySelector(".search-card") as HTMLDivElement;
 const baseUrl: string = `https://api.themoviedb.org/3/`;
+const pagination = document.querySelector(".pagination") as HTMLDivElement;
+const searchButton = document.querySelector(
+  "#searchButton"
+) as HTMLButtonElement;
+const displayTotalPages = document.querySelector(
+  ".totalPages"
+) as HTMLParagraphElement;
+const displayCurrentPage = document.querySelector(
+  ".currentPage"
+) as HTMLParagraphElement;
+const previousButton = document.querySelector(".previous") as HTMLButtonElement;
+const nextButton = document.querySelector(".next") as HTMLButtonElement;
+let currentPage: number = 1;
+let totalPages: number = 0;
 
 interface ListPopular {
   title: string;
@@ -15,17 +29,60 @@ interface ListPopular {
   vote_average: number;
   vote_count: number;
 }
-
 async function logList(urlPath, urlRestPath, elementTarget) {
   const response = await fetch(
     `${baseUrl}${urlPath}${process.env.API_KEY}${urlRestPath}`
   );
   const jsonData = await response.json();
   const list: ListPopular[] = jsonData.results;
-  // console.log(list);
+  totalPages = jsonData.total_pages;
+  console.log(jsonData);
+  displayCurrentPage.textContent = `Page ${currentPage}`;
+  displayTotalPages.textContent = `Total pages: ${totalPages}`;
+  console.log(`There is ${totalPages} pages for that result`);
+  console.log(currentPage);
 
   fetchImage(list, elementTarget);
 }
+
+previousButton.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    displayCurrentPage.textContent = `Page ${currentPage}`;
+    while (searchCard.hasChildNodes()) {
+      searchCard.removeChild(searchCard.firstChild);
+    }
+    logList(
+      "search/movie?api_key=",
+      `&language=en-US&query=${currentInput}&page=${currentPage}&include_adult=false`,
+      ".search-card"
+    );
+  } else {
+    alert("You're already on page 1");
+  }
+});
+nextButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (currentPage < totalPages) {
+    currentPage++;
+    console.log("clicked");
+
+    console.log(currentPage);
+
+    displayCurrentPage.textContent = `Page ${currentPage}`;
+    console.log(currentInput);
+    while (searchCard.hasChildNodes()) {
+      searchCard.removeChild(searchCard.firstChild);
+    }
+    logList(
+      "search/movie?api_key=",
+      `&language=en-US&query=${currentInput}&page=${currentPage}&include_adult=false`,
+      ".search-card"
+    );
+  } else {
+    alert("You're already on the last page");
+  }
+});
 
 logList(
   "discover/movie?api_key=",
@@ -33,29 +90,25 @@ logList(
   ".card"
 );
 
-// logTrendingToday();
 logList("trending/all/day?api_key=", "", ".card-2");
 
 logList("movie/top_rated?api_key=", "&language=en-US&page=1", ".card-3");
 
 logList("movie/upcoming?api_key=", "&language=en-US&page=1", ".card-4");
-
-const searchButton = document.querySelector(
-  "#searchButton"
-) as HTMLButtonElement;
-
-function startSearch() {
+let currentInput: string = "";
+function startSearch(page) {
   const input = document.querySelector("#searchInput") as HTMLInputElement;
   const popup = document.querySelector(".popup") as HTMLDivElement;
   const searchInfo = document.querySelector(
     ".searchInfo"
   ) as HTMLHeadingElement;
   searchInfo.textContent = input.value;
+  currentInput = input.value;
   popup.classList.remove("hidden");
   popup.classList.add("flex");
   logList(
     "search/movie?api_key=",
-    `&language=en-US&query=${input.value}&page=1&include_adult=false`,
+    `&language=en-US&query=${input.value}&page=${page}&include_adult=false`,
     ".search-card"
   );
   input.value = "";
@@ -64,31 +117,50 @@ function startSearch() {
   }
 }
 searchButton.addEventListener("click", () => {
-  startSearch();
+  currentPage = 1;
+  displayCurrentPage.textContent = `${currentPage}`;
+  startSearch(currentPage);
 });
 window.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
-    startSearch();
+    currentPage = 1;
+    displayCurrentPage.textContent = `${currentPage}`;
+    startSearch(currentPage);
   } else {
   }
 });
 
 async function fetchImage(list, target) {
+  const card = document.querySelector(target) as HTMLDivElement;
   for (let i = 0; i < list.length; i++) {
-    const response = await fetch(
-      `https://image.tmdb.org/t/p/original${list[i].poster_path}`
-    );
-    /*     console.log(list[i].poster_path); */
-    // console.log(`https://image.tmdb.org/t/p/w500${list[i].poster_path}`);
-
-    const image = await response;
-    // console.log(image);
-    // console.log(typeof `${list[i].poster_path}`, `${list[i].poster_path}`);
-
-    const card = document.querySelector(target) as HTMLDivElement;
-
-    if (list[i].poster_path === null) {
-      console.log(image.url);
+    if (list[i].poster_path !== null) {
+      try {
+        const response = await fetch(
+          `https://image.tmdb.org/t/p/w154${list[i].poster_path}`
+        );
+        const image = await response;
+        console.log(image);
+        const imageDisplay = document.createElement("img") as HTMLImageElement;
+        imageDisplay.src = image.url;
+        imageDisplay.classList.add(
+          "object-contain",
+          "max-w-[160px]",
+          "sm:w-1/2",
+          "md:w-1/3",
+          "lg:w-1/4"
+        );
+        if (i % 2 === 0) {
+          imageDisplay.classList.add("snap-center");
+        }
+        imageDisplay.setAttribute("movieID", `${list[i].id}`);
+        card.appendChild(imageDisplay);
+        imageDisplay.addEventListener("click", () => {
+          displayDetails(list[i]);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
       const backTitle = document.createElement("p") as HTMLParagraphElement;
       backTitle.textContent = `${list[i].title}`;
       backTitle.classList.add(
@@ -105,26 +177,6 @@ async function fetchImage(list, target) {
       );
       card.appendChild(backTitle);
       backTitle.addEventListener("click", () => {
-        // console.log(list[i]);
-        displayDetails(list[i]);
-      });
-    } else {
-      const imageDisplay = document.createElement("img") as HTMLImageElement;
-      imageDisplay.src = image.url;
-      imageDisplay.classList.add(
-        "object-contain",
-        "max-w-[160px]",
-        "sm:w-1/2",
-        "md:w-1/3",
-        "lg:w-1/4"
-      );
-      if (i % 2 === 0) {
-        imageDisplay.classList.add("snap-center");
-      }
-      imageDisplay.setAttribute("movieID", `${list[i].id}`);
-      card.appendChild(imageDisplay);
-      imageDisplay.addEventListener("click", () => {
-        // console.log(list[i]);
         displayDetails(list[i]);
       });
     }

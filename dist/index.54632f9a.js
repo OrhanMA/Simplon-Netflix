@@ -142,7 +142,7 @@
       this[globalName] = mainExports;
     }
   }
-})({"cYnab":[function(require,module,exports) {
+})({"48Z2s":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
@@ -561,55 +561,83 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 const searchCard = document.querySelector(".search-card");
 const baseUrl = `https://api.themoviedb.org/3/`;
+const pagination = document.querySelector(".pagination");
+const searchButton = document.querySelector("#searchButton");
+const displayTotalPages = document.querySelector(".totalPages");
+const displayCurrentPage = document.querySelector(".currentPage");
+// const navButtons = document.querySelector('navButtons') as HTMLDivElement
+const previousButton = document.querySelector(".previous");
+const nextButton = document.querySelector(".next");
+let currentPage = 1;
+let totalPages = 0;
 async function logList(urlPath, urlRestPath, elementTarget) {
     const response = await fetch(`${baseUrl}${urlPath}${"251eba6339398c651fc281766138baf5"}${urlRestPath}`);
     const jsonData = await response.json();
     const list = jsonData.results;
-    // console.log(list);
+    totalPages = jsonData.total_pages;
+    console.log(jsonData);
+    displayCurrentPage.textContent = `Page ${currentPage}`;
+    displayTotalPages.textContent = `Total pages: ${totalPages}`;
+    console.log(`There is ${totalPages} pages for that result`);
+    console.log(currentPage);
     fetchImage(list, elementTarget);
 }
+previousButton.addEventListener("click", ()=>{
+    if (currentPage > 1) {
+        currentPage--;
+        displayCurrentPage.textContent = `Page ${currentPage}`;
+        while(searchCard.hasChildNodes())searchCard.removeChild(searchCard.firstChild);
+        logList("search/movie?api_key=", `&language=en-US&query=${currentInput}&page=${currentPage}&include_adult=false`, ".search-card");
+    } else alert("You're already on page 1");
+});
+nextButton.addEventListener("click", (e)=>{
+    e.preventDefault();
+    if (currentPage < totalPages) {
+        currentPage++;
+        console.log("clicked");
+        console.log(currentPage);
+        displayCurrentPage.textContent = `Page ${currentPage}`;
+        console.log(currentInput);
+        while(searchCard.hasChildNodes())searchCard.removeChild(searchCard.firstChild);
+        logList("search/movie?api_key=", `&language=en-US&query=${currentInput}&page=${currentPage}&include_adult=false`, ".search-card");
+    } else alert("You're already on the last page");
+});
 logList("discover/movie?api_key=", "&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate", ".card");
-// logTrendingToday();
 logList("trending/all/day?api_key=", "", ".card-2");
 logList("movie/top_rated?api_key=", "&language=en-US&page=1", ".card-3");
 logList("movie/upcoming?api_key=", "&language=en-US&page=1", ".card-4");
-const searchButton = document.querySelector("#searchButton");
-function startSearch() {
+let currentInput = "";
+function startSearch(page) {
     const input = document.querySelector("#searchInput");
     const popup = document.querySelector(".popup");
     const searchInfo = document.querySelector(".searchInfo");
     searchInfo.textContent = input.value;
+    currentInput = input.value;
     popup.classList.remove("hidden");
     popup.classList.add("flex");
-    logList("search/movie?api_key=", `&language=en-US&query=${input.value}&page=1&include_adult=false`, ".search-card");
+    logList("search/movie?api_key=", `&language=en-US&query=${input.value}&page=${page}&include_adult=false`, ".search-card");
     input.value = "";
     while(searchCard.hasChildNodes())searchCard.removeChild(searchCard.firstChild);
 }
 searchButton.addEventListener("click", ()=>{
-    startSearch();
+    currentPage = 1;
+    displayCurrentPage.textContent = `${currentPage}`;
+    startSearch(currentPage);
 });
 window.addEventListener("keydown", (e)=>{
-    if (e.key === "Enter") startSearch();
+    if (e.key === "Enter") {
+        currentPage = 1;
+        displayCurrentPage.textContent = `${currentPage}`;
+        startSearch(currentPage);
+    }
 });
 async function fetchImage(list, target) {
+    const card = document.querySelector(target);
     for(let i = 0; i < list.length; i++){
-        const response = await fetch(`https://image.tmdb.org/t/p/original${list[i].poster_path}`);
-        /*     console.log(list[i].poster_path); */ // console.log(`https://image.tmdb.org/t/p/w500${list[i].poster_path}`);
-        const image = await response;
-        // console.log(image);
-        // console.log(typeof `${list[i].poster_path}`, `${list[i].poster_path}`);
-        const card = document.querySelector(target);
-        if (list[i].poster_path === null) {
-            console.log(image.url);
-            const backTitle = document.createElement("p");
-            backTitle.textContent = `${list[i].title}`;
-            backTitle.classList.add("text-center", "max-w-[160px]", "sm:w-1/2", "md:w-1/3", "lg:w-1/4", "text-3xl", "flex", "items-center", "justify-center", "px-2");
-            card.appendChild(backTitle);
-            backTitle.addEventListener("click", ()=>{
-                // console.log(list[i]);
-                displayDetails(list[i]);
-            });
-        } else {
+        if (list[i].poster_path !== null) try {
+            const response = await fetch(`https://image.tmdb.org/t/p/w154${list[i].poster_path}`);
+            const image = await response;
+            console.log(image);
             const imageDisplay = document.createElement("img");
             imageDisplay.src = image.url;
             imageDisplay.classList.add("object-contain", "max-w-[160px]", "sm:w-1/2", "md:w-1/3", "lg:w-1/4");
@@ -617,11 +645,73 @@ async function fetchImage(list, target) {
             imageDisplay.setAttribute("movieID", `${list[i].id}`);
             card.appendChild(imageDisplay);
             imageDisplay.addEventListener("click", ()=>{
-                // console.log(list[i]);
+                displayDetails(list[i]);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+        else {
+            const backTitle = document.createElement("p");
+            backTitle.textContent = `${list[i].title}`;
+            backTitle.classList.add("text-center", "max-w-[160px]", "sm:w-1/2", "md:w-1/3", "lg:w-1/4", "text-3xl", "flex", "items-center", "justify-center", "px-2");
+            card.appendChild(backTitle);
+            backTitle.addEventListener("click", ()=>{
                 displayDetails(list[i]);
             });
         }
     }
+// for (let i = 0; i < list.length; i++) {
+//   const response = await fetch(
+//     `https://image.tmdb.org/t/p/original${list[i].poster_path}`
+//   );
+//   /*     console.log(list[i].poster_path); */
+//   // console.log(`https://image.tmdb.org/t/p/w500${list[i].poster_path}`);
+//   const image = await response;
+//   // console.log(image);
+//   // console.log(typeof `${list[i].poster_path}`, `${list[i].poster_path}`);
+//   if (list[i].poster_path === null) {
+//     console.log(image.url);
+//     const backTitle = document.createElement("p") as HTMLParagraphElement;
+//     backTitle.textContent = `${list[i].title}`;
+//     backTitle.classList.add(
+//       "text-center",
+//       "max-w-[160px]",
+//       "sm:w-1/2",
+//       "md:w-1/3",
+//       "lg:w-1/4",
+//       "text-3xl",
+//       "flex",
+//       "items-center",
+//       "justify-center",
+//       "px-2"
+//     );
+//     card.appendChild(backTitle);
+//     backTitle.addEventListener("click", () => {
+//       // console.log(list[i]);
+//       displayDetails(list[i]);
+//     });
+//   } else {
+//     const imageDisplay = document.createElement("img") as HTMLImageElement;
+//     imageDisplay.src = image.url;
+//     imageDisplay.classList.add(
+//       "object-contain",
+//       "max-w-[160px]",
+//       "sm:w-1/2",
+//       "md:w-1/3",
+//       "lg:w-1/4"
+//     );
+//     if (i % 2 === 0) {
+//       imageDisplay.classList.add("snap-center");
+//     }
+//     imageDisplay.setAttribute("movieID", `${list[i].id}`);
+//     card.appendChild(imageDisplay);
+//     imageDisplay.addEventListener("click", () => {
+//       // console.log(list[i]);
+//       displayDetails(list[i]);
+//     });
+//   }
+//   const card = document.querySelector(target) as HTMLDivElement;
+// }
 }
 const popup = document.querySelector(".popup");
 const closeSearch = document.querySelector(".close-search");
@@ -660,7 +750,7 @@ closeDetailsBtn.addEventListener("click", ()=>{
     movieDetails.classList.add("hidden");
 });
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"6KWtk"}],"6KWtk":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -690,6 +780,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["cYnab","gg0zR"], "gg0zR", "parcelRequire7640")
+},{}]},["48Z2s","gg0zR"], "gg0zR", "parcelRequire7640")
 
 //# sourceMappingURL=index.54632f9a.js.map
