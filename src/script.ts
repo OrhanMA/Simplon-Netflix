@@ -29,6 +29,7 @@ interface ListPopular {
   vote_average: number;
   vote_count: number;
 }
+
 async function logList(urlPath, urlRestPath, elementTarget) {
   const response = await fetch(
     `${baseUrl}${urlPath}${process.env.API_KEY}${urlRestPath}`
@@ -36,11 +37,11 @@ async function logList(urlPath, urlRestPath, elementTarget) {
   const jsonData = await response.json();
   const list: ListPopular[] = jsonData.results;
   totalPages = jsonData.total_pages;
-  console.log(jsonData);
+  // console.log(jsonData);
   displayCurrentPage.textContent = `Page ${currentPage}`;
   displayTotalPages.textContent = `Total pages: ${totalPages}`;
-  console.log(`There is ${totalPages} pages for that result`);
-  console.log(currentPage);
+  // console.log(`There is ${totalPages} pages for that result`);
+  // console.log(currentPage);
 
   fetchImage(list, elementTarget);
 }
@@ -65,12 +66,12 @@ nextButton.addEventListener("click", (e) => {
   e.preventDefault();
   if (currentPage < totalPages) {
     currentPage++;
-    console.log("clicked");
+    // console.log("clicked");
 
-    console.log(currentPage);
+    // console.log(currentPage);
 
     displayCurrentPage.textContent = `Page ${currentPage}`;
-    console.log(currentInput);
+    // console.log(currentInput);
     while (searchCard.hasChildNodes()) {
       searchCard.removeChild(searchCard.firstChild);
     }
@@ -133,13 +134,14 @@ window.addEventListener("keydown", (e) => {
 async function fetchImage(list, target) {
   const card = document.querySelector(target) as HTMLDivElement;
   for (let i = 0; i < list.length; i++) {
+    // console.log(list[i].id);
     if (list[i].poster_path !== null) {
       try {
         const response = await fetch(
           `https://image.tmdb.org/t/p/w154${list[i].poster_path}`
         );
         const image = await response;
-        console.log(image);
+        // console.log(image);
         const imageDisplay = document.createElement("img") as HTMLImageElement;
         imageDisplay.src = image.url;
         imageDisplay.classList.add(
@@ -156,9 +158,16 @@ async function fetchImage(list, target) {
         card.appendChild(imageDisplay);
         imageDisplay.addEventListener("click", () => {
           displayDetails(list[i]);
+          const recommendations = document.querySelector(
+            ".recommendation"
+          ) as HTMLDivElement;
+          while (recommendations.hasChildNodes()) {
+            recommendations.removeChild(recommendations.firstChild);
+          }
+          displayRecommendations(list[i].id);
         });
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       }
     } else {
       const backTitle = document.createElement("p") as HTMLParagraphElement;
@@ -178,6 +187,13 @@ async function fetchImage(list, target) {
       card.appendChild(backTitle);
       backTitle.addEventListener("click", () => {
         displayDetails(list[i]);
+        const recommendations: HTMLDivElement = document.querySelector(
+          ".recommendation"
+        ) as HTMLDivElement;
+        while (recommendations.hasChildNodes()) {
+          recommendations.removeChild(recommendations.firstChild);
+        }
+        displayRecommendations(list[i].id);
       });
     }
   }
@@ -229,8 +245,29 @@ async function displayDetails(movie) {
   poster.src = image.url;
   poster.setAttribute("movieID", `${movie.id}`);
   poster.classList.add("max-w-[200px]", "sm:max-w-[250px]");
+  const recommendationText = document.querySelector(
+    ".recommendationText"
+  ) as HTMLDivElement;
+  if (movie.title === undefined) {
+    recommendationText.textContent = `Recommendations based on that movie`;
+  } else {
+    recommendationText.textContent = `Recommendations based on ${movie.title}`;
+  }
 }
 
+async function displayRecommendations(movieID) {
+  try {
+    const response = await fetch(
+      `${baseUrl}movie/${movieID}/recommendations?api_key=${process.env.API_KEY}&language=en-US&page=1`
+    );
+    const list = await response.json();
+    const recommendations: ListPopular[] = list.results;
+    console.log(recommendations);
+    fetchImage(recommendations, ".recommendation");
+  } catch (error) {
+    console.log(error);
+  }
+}
 const closeDetailsBtn = document.querySelector(
   ".close-details-btn"
 ) as HTMLButtonElement;

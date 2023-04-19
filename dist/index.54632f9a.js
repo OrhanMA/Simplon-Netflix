@@ -565,7 +565,6 @@ const pagination = document.querySelector(".pagination");
 const searchButton = document.querySelector("#searchButton");
 const displayTotalPages = document.querySelector(".totalPages");
 const displayCurrentPage = document.querySelector(".currentPage");
-// const navButtons = document.querySelector('navButtons') as HTMLDivElement
 const previousButton = document.querySelector(".previous");
 const nextButton = document.querySelector(".next");
 let currentPage = 1;
@@ -575,11 +574,11 @@ async function logList(urlPath, urlRestPath, elementTarget) {
     const jsonData = await response.json();
     const list = jsonData.results;
     totalPages = jsonData.total_pages;
-    console.log(jsonData);
+    // console.log(jsonData);
     displayCurrentPage.textContent = `Page ${currentPage}`;
     displayTotalPages.textContent = `Total pages: ${totalPages}`;
-    console.log(`There is ${totalPages} pages for that result`);
-    console.log(currentPage);
+    // console.log(`There is ${totalPages} pages for that result`);
+    // console.log(currentPage);
     fetchImage(list, elementTarget);
 }
 previousButton.addEventListener("click", ()=>{
@@ -594,10 +593,10 @@ nextButton.addEventListener("click", (e)=>{
     e.preventDefault();
     if (currentPage < totalPages) {
         currentPage++;
-        console.log("clicked");
-        console.log(currentPage);
+        // console.log("clicked");
+        // console.log(currentPage);
         displayCurrentPage.textContent = `Page ${currentPage}`;
-        console.log(currentInput);
+        // console.log(currentInput);
         while(searchCard.hasChildNodes())searchCard.removeChild(searchCard.firstChild);
         logList("search/movie?api_key=", `&language=en-US&query=${currentInput}&page=${currentPage}&include_adult=false`, ".search-card");
     } else alert("You're already on the last page");
@@ -634,10 +633,11 @@ window.addEventListener("keydown", (e)=>{
 async function fetchImage(list, target) {
     const card = document.querySelector(target);
     for(let i = 0; i < list.length; i++){
+        // console.log(list[i].id);
         if (list[i].poster_path !== null) try {
             const response = await fetch(`https://image.tmdb.org/t/p/w154${list[i].poster_path}`);
             const image = await response;
-            console.log(image);
+            // console.log(image);
             const imageDisplay = document.createElement("img");
             imageDisplay.src = image.url;
             imageDisplay.classList.add("object-contain", "max-w-[160px]", "sm:w-1/2", "md:w-1/3", "lg:w-1/4");
@@ -646,9 +646,12 @@ async function fetchImage(list, target) {
             card.appendChild(imageDisplay);
             imageDisplay.addEventListener("click", ()=>{
                 displayDetails(list[i]);
+                const recommendations = document.querySelector(".recommendation");
+                while(recommendations.hasChildNodes())recommendations.removeChild(recommendations.firstChild);
+                displayRecommendations(list[i].id);
             });
         } catch (error) {
-            console.error(error);
+        // console.error(error);
         }
         else {
             const backTitle = document.createElement("p");
@@ -657,61 +660,12 @@ async function fetchImage(list, target) {
             card.appendChild(backTitle);
             backTitle.addEventListener("click", ()=>{
                 displayDetails(list[i]);
+                const recommendations = document.querySelector(".recommendation");
+                while(recommendations.hasChildNodes())recommendations.removeChild(recommendations.firstChild);
+                displayRecommendations(list[i].id);
             });
         }
     }
-// for (let i = 0; i < list.length; i++) {
-//   const response = await fetch(
-//     `https://image.tmdb.org/t/p/original${list[i].poster_path}`
-//   );
-//   /*     console.log(list[i].poster_path); */
-//   // console.log(`https://image.tmdb.org/t/p/w500${list[i].poster_path}`);
-//   const image = await response;
-//   // console.log(image);
-//   // console.log(typeof `${list[i].poster_path}`, `${list[i].poster_path}`);
-//   if (list[i].poster_path === null) {
-//     console.log(image.url);
-//     const backTitle = document.createElement("p") as HTMLParagraphElement;
-//     backTitle.textContent = `${list[i].title}`;
-//     backTitle.classList.add(
-//       "text-center",
-//       "max-w-[160px]",
-//       "sm:w-1/2",
-//       "md:w-1/3",
-//       "lg:w-1/4",
-//       "text-3xl",
-//       "flex",
-//       "items-center",
-//       "justify-center",
-//       "px-2"
-//     );
-//     card.appendChild(backTitle);
-//     backTitle.addEventListener("click", () => {
-//       // console.log(list[i]);
-//       displayDetails(list[i]);
-//     });
-//   } else {
-//     const imageDisplay = document.createElement("img") as HTMLImageElement;
-//     imageDisplay.src = image.url;
-//     imageDisplay.classList.add(
-//       "object-contain",
-//       "max-w-[160px]",
-//       "sm:w-1/2",
-//       "md:w-1/3",
-//       "lg:w-1/4"
-//     );
-//     if (i % 2 === 0) {
-//       imageDisplay.classList.add("snap-center");
-//     }
-//     imageDisplay.setAttribute("movieID", `${list[i].id}`);
-//     card.appendChild(imageDisplay);
-//     imageDisplay.addEventListener("click", () => {
-//       // console.log(list[i]);
-//       displayDetails(list[i]);
-//     });
-//   }
-//   const card = document.querySelector(target) as HTMLDivElement;
-// }
 }
 const popup = document.querySelector(".popup");
 const closeSearch = document.querySelector(".close-search");
@@ -743,6 +697,20 @@ async function displayDetails(movie) {
     poster.src = image.url;
     poster.setAttribute("movieID", `${movie.id}`);
     poster.classList.add("max-w-[200px]", "sm:max-w-[250px]");
+    const recommendationText = document.querySelector(".recommendationText");
+    if (movie.title === undefined) recommendationText.textContent = `Recommendations based on that movie`;
+    else recommendationText.textContent = `Recommendations based on ${movie.title}`;
+}
+async function displayRecommendations(movieID) {
+    try {
+        const response = await fetch(`${baseUrl}movie/${movieID}/recommendations?api_key=${"251eba6339398c651fc281766138baf5"}&language=en-US&page=1`);
+        const list = await response.json();
+        const recommendations = list.results;
+        console.log(recommendations);
+        fetchImage(recommendations, ".recommendation");
+    } catch (error) {
+        console.log(error);
+    }
 }
 const closeDetailsBtn = document.querySelector(".close-details-btn");
 closeDetailsBtn.addEventListener("click", ()=>{
