@@ -113,8 +113,10 @@ function startSearch(page) {
     ".search-card"
   );
   input.value = "";
-  while (searchCard.hasChildNodes()) {
-    searchCard.removeChild(searchCard.firstChild);
+  if (searchCard) {
+    while (searchCard.hasChildNodes()) {
+      searchCard.removeChild(searchCard.firstChild);
+    }
   }
 }
 searchButton.addEventListener("click", () => {
@@ -274,4 +276,9 @@ const closeDetailsBtn = document.querySelector(
 closeDetailsBtn.addEventListener("click", () => {
   movieDetails.classList.remove("flex");
   movieDetails.classList.add("hidden");
+});
+
+const netflix = document.querySelector(".netflix") as HTMLParagraphElement;
+netflix.addEventListener("click", () => {
+  location.reload();
 });

@@ -616,7 +616,7 @@ function startSearch(page) {
     popup.classList.add("flex");
     logList("search/movie?api_key=", `&language=en-US&query=${input.value}&page=${page}&include_adult=false`, ".search-card");
     input.value = "";
-    while(searchCard.hasChildNodes())searchCard.removeChild(searchCard.firstChild);
+    if (searchCard) while(searchCard.hasChildNodes())searchCard.removeChild(searchCard.firstChild);
 }
 searchButton.addEventListener("click", ()=>{
     currentPage = 1;
@@ -716,6 +716,10 @@ const closeDetailsBtn = document.querySelector(".close-details-btn");
 closeDetailsBtn.addEventListener("click", ()=>{
     movieDetails.classList.remove("flex");
     movieDetails.classList.add("hidden");
+});
+const netflix = document.querySelector(".netflix");
+netflix.addEventListener("click", ()=>{
+    location.reload();
 });
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
