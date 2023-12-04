@@ -11,18 +11,9 @@
 
 <br><br/>
 
-## `Deux solutions pour ajouter votre clé API:`
+### Vous devez recuperer une cle API sur TheMovieDB
 
-### 1. `MÉTHODE 1 (rapide): Attention! Clé non cachée en cas de push`:
-
-Dans le script.ts:
-
-- supprimer les lignes 1 et 2.
-- dans la déclaration de la fonction loglist et remplace le '${process.env.API_KEY}' par ta clé.
-
-  <br><br/>
-
-### 2. `MÉTHODE 2: Safe pour le push en remote`:
+https://www.themoviedb.org/settings/api
 
 - Créer un fichier .env
 
